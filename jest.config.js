@@ -1,20 +1,30 @@
+const {existsSync} = require('fs');
+const {dirname, join} = require('path');
+
 /**
- * @9in-io/node and @9in-io/sdk are local file: dependencies; tests run them from TypeScript
- * source so no build is needed (the "@9in/source" export condition selects @9in-io/sdk's
- * src/*.ts, ts-jest transpiles, `./x.js` imports map to `./x`).
+ * @9in-io/node and @9in-io/sdk come from npm (build/ and dist/) or, during local development,
+ * from links to ../node and v2/packages/sdk. Links are run from TypeScript source, which the
+ * npm packages do not ship, so that is only done when src/ exists: @9in-io/node is mapped to
+ * src/index.ts and the "@9in/source" export condition selects @9in-io/sdk's src/*.ts.
+ * ts-jest transpiles everything to CommonJS (allowJs for the ESM dist/*.js of @9in-io/sdk)
+ * and `./x.js` imports map to `./x`.
  */
+const nodeSource = join(__dirname, 'node_modules/@9in-io/node/src/index.ts');
+const sdk = dirname(require.resolve('@9in-io/sdk/package.json', {paths: [dirname(require.resolve('@9in-io/node/package.json'))]}));
+const sdkFromSource = existsSync(join(sdk, 'src'));
+
 module.exports = {
     clearMocks: true,
     testEnvironment: 'node',
-    testEnvironmentOptions: {customExportConditions: ['@9in/source', 'node', 'node-addons']},
+    testEnvironmentOptions: {customExportConditions: [...(sdkFromSource ? ['@9in/source'] : []), 'node', 'node-addons']},
     roots: ['<rootDir>/src'],
     modulePathIgnorePatterns: ['<rootDir>/build'],
     transform: {
-        '^.+\\.ts$': ['ts-jest', {tsconfig: '<rootDir>/tsconfig.test.json'}],
+        '^.+\\.[tj]s$': ['ts-jest', {tsconfig: '<rootDir>/tsconfig.test.json'}],
     },
     transformIgnorePatterns: ['/node_modules/(?!@9in-io/)'],
     moduleNameMapper: {
-        '^@9in-io/node$': '<rootDir>/node_modules/@9in-io/node/src/index.ts',
+        ...(existsSync(nodeSource) ? {'^@9in-io/node$': nodeSource} : {}),
         '^(\\.{1,2}/.*)\\.js$': '$1',
     },
 };
