@@ -5,8 +5,8 @@
 
 Keep your users in your own database and sign them in with [9in](https://9in.io).
 
-`@9in/express-server` is an Express router for 9in's **adapter protocol v2**, built on
-[`@9in/node`](https://github.com/9in-io/node-sdk) and `@9in/sdk`:
+`@9in-io/express-server` is an Express router for 9in's **adapter protocol v2**, built on
+[`@9in-io/node`](https://github.com/9in-io/node-sdk) and `@9in-io/sdk`:
 
 | Endpoint | What 9in asks |
 |---|---|
@@ -19,7 +19,7 @@ signed over the path and 9in's request id. Applications, scopes, social login, s
 and two-factor authentication are configured in the 9in console.
 
 ```bash
-npm install @9in/express-server express
+npm install @9in-io/express-server express
 ```
 
 Upgrading from `@ssofy/express-server` 1.x? Read [MIGRATION.md](MIGRATION.md).
@@ -29,7 +29,7 @@ Upgrading from `@ssofy/express-server` 1.x? Read [MIGRATION.md](MIGRATION.md).
 ```ts
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import {nineAdapter, Notifications, type UserStore} from '@9in/express-server';
+import {nineAdapter, Notifications, type UserStore} from '@9in-io/express-server';
 
 const users: UserStore<UserRow> = {
     findById: (id) => db.user.findUnique({where: {id: Number(id)}}),
@@ -90,13 +90,13 @@ adapter event under its type, and/or handle them in `onEvent`.
 |---|---|
 | `NINE_ADAPTER_SECRET` | `SSOFY_ADAPTER_SECRET`, `SSOFY_API_SECRET` |
 
-Everything from `@9in/node` is re-exported (`requireAuth`, `webhookHandler`,
+Everything from `@9in-io/node` is re-exported (`requireAuth`, `webhookHandler`,
 `ManagementClient`, notifiers, …).
 
 ## Development
 
 ```bash
-npm install     # links @9in/node from ../node (see package.json)
+npm install     # links @9in-io/node from ../node (see package.json)
 npm test
 npm run build
 ```

@@ -1,11 +1,16 @@
 # CHANGELOG
 
-## 2.0.0 - unreleased
+## 2.0.1 - 2026-11-09
 
-Rebranded as **9in** (`@9in/express-server`) and moved to adapter protocol v2 on `@9in/node`. See [MIGRATION.md](MIGRATION.md).
+First release on npm, as `@9in-io/express-server`: the npm organisation `9in` belongs to someone else, so the 9in
+packages are published under `@9in-io` (the name of 9in's GitHub account). Same code as 2.0.0.
+
+## 2.0.0 - 2026-11-09 (not published to npm)
+
+Rebranded as **9in** (`@9in-io/express-server`) and moved to adapter protocol v2 on `@9in-io/node`. See [MIGRATION.md](MIGRATION.md).
 
 * `nineAdapter({users, otp, channels, onEvent})`: Express router with `POST /authenticate`, `/user`, `/event` only.
-* Timestamped `9in-signature` on requests and responses (via `adapterHandler` from `@9in/sdk`), secret rotation.
+* Timestamped `9in-signature` on requests and responses (via `adapterHandler` from `@9in-io/sdk`), secret rotation.
 * `UserStore` interface (four functions) replaces datasource connections, repositories, filters and transformers.
 * `otp.requested` delivered with the existing notifiers and bundled templates.
 * Removed: client, scopes, users, otp-options, social and token endpoints; validators; `ServerConfig`; demo app.

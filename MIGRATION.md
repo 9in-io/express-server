@@ -1,4 +1,4 @@
-# Migrating from `@ssofy/express-server` 1.x to `@9in/express-server` 2.x
+# Migrating from `@ssofy/express-server` 1.x to `@9in-io/express-server` 2.x
 
 SSOfy is now [9in](https://9in.io). 2.0 is a new major version under a new package name
 that serves **adapter protocol v2**.
@@ -10,7 +10,7 @@ That service has shut down (ssofy.com has lapsed), and 9in never calls those end
 
 ```bash
 npm uninstall @ssofy/express-server @ssofy/node-sdk
-npm install @9in/express-server
+npm install @9in-io/express-server
 ```
 
 Node.js 20.19+ is required.
@@ -58,4 +58,4 @@ signature. The signature covers the raw body: mount the router **before** `expre
 `*EventParameters`. 2.x publishes the 9in adapter events as they arrive
 (`otp.requested`, `user.updated`, `user.password_changed`, `session.revoked`, …) to your
 channels and `onEvent`. For users stored by 9in, use tenant webhooks
-(`webhookHandler()` from `@9in/node`).
+(`webhookHandler()` from `@9in-io/node`).

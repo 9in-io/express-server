@@ -9,7 +9,7 @@ import {
     type AdapterEvent,
     type AdapterIdentifier,
     type AdapterUser,
-} from '@9in/node';
+} from '@9in-io/node';
 
 /**
  * Your user database, as 9in needs it. `U` is your own user record.
@@ -108,5 +108,5 @@ export function nineAdapter<U>(config: NineAdapterConfig<U>): Router {
     return router;
 }
 
-export * from '@9in/node';
+export * from '@9in-io/node';
 export default nineAdapter;

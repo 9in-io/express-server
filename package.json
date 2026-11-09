@@ -1,6 +1,6 @@
 {
-  "name": "@9in/express-server",
-  "version": "2.0.0",
+  "name": "@9in-io/express-server",
+  "version": "2.0.1",
   "description": "Keep your users in your own database and sign them in with 9in: an Express router for adapter protocol v2 (authenticate, user, event) with OTP delivery and event channels.",
   "keywords": [
     "9in",
@@ -34,7 +34,7 @@
     "node": ">=20.19"
   },
   "dependencies": {
-    "@9in/node": "^3.0.0",
+    "@9in-io/node": "^3.0.0",
     "express": "^4.21.2 || ^5.1.0"
   },
   "devDependencies": {

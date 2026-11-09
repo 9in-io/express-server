@@ -18,7 +18,7 @@ exports.defaultOtpTemplate = defaultOtpTemplate;
 exports.nineAdapter = nineAdapter;
 const node_path_1 = require("node:path");
 const express_1 = require("express");
-const node_1 = require("@9in/node");
+const node_1 = require("@9in-io/node");
 const TEMPLATES = (0, node_path_1.join)(__dirname, 'templates', 'otp');
 /** The bundled OTP templates (Handlebars; data: `data.code`, `data.purpose`, `data.expiresAt`, `vars.brand`). */
 function defaultOtpTemplate(channel) {
@@ -80,5 +80,5 @@ function nineAdapter(config) {
     router.post(['/authenticate', '/user', '/event'], handler);
     return router;
 }
-__exportStar(require("@9in/node"), exports);
+__exportStar(require("@9in-io/node"), exports);
 exports.default = nineAdapter;

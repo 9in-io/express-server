@@ -2,7 +2,7 @@ import {afterEach, describe, expect, it} from '@jest/globals';
 import express from 'express';
 import type {AddressInfo} from 'node:net';
 import type {Server} from 'node:http';
-import {Events, Notifications, signPayload, verifySignature, type AdapterIdentifier} from '@9in/node';
+import {Events, Notifications, signPayload, verifySignature, type AdapterIdentifier} from '@9in-io/node';
 import {nineAdapter, type UserStore} from '../index';
 
 interface Row {

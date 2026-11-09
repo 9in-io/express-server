@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Events, Notifications, type AdapterEvent, type AdapterIdentifier, type AdapterUser } from '@9in/node';
+import { Events, Notifications, type AdapterEvent, type AdapterIdentifier, type AdapterUser } from '@9in-io/node';
 /**
  * Your user database, as 9in needs it. `U` is your own user record.
  */
@@ -45,5 +45,5 @@ export declare function defaultOtpTemplate(channel: Notifications.Channel): Noti
  * and set the adapter URL in the 9in console to https://your-app.com/nine.
  */
 export declare function nineAdapter<U>(config: NineAdapterConfig<U>): Router;
-export * from '@9in/node';
+export * from '@9in-io/node';
 export default nineAdapter;
