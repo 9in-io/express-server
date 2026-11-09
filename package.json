@@ -1,48 +1,48 @@
 {
-  "name": "@ssofy/express-server",
-  "version": "1.0.1",
-  "description": "Official SSOfy Node Express (Server) Package.",
+  "name": "@9in/express-server",
+  "version": "2.0.0",
+  "description": "Keep your users in your own database and sign them in with 9in: an Express router for adapter protocol v2 (authenticate, user, event) with OTP delivery and event channels.",
   "keywords": [
-    "ssofy",
+    "9in",
     "sso",
-    "login",
-    "auth",
-    "authentication",
-    "oauth",
+    "express",
+    "adapter",
     "oauth2",
-    "sdk"
+    "openid-connect",
+    "authentication"
   ],
   "license": "MIT",
-  "author": "SSOfy <support@ssofy.com>",
-  "homepage": "https://www.ssofy.com",
+  "author": "9in <support@9in.io>",
+  "homepage": "https://9in.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ssofy/express-server.git"
+    "url": "https://github.com/9in-io/express-server.git"
   },
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "files": [
+    "build",
+    "README.md",
+    "MIGRATION.md",
+    "CHANGELOG.md"
+  ],
   "scripts": {
-    "prebuild": "copyfiles -u 1 src/templates/**/* build/",
-    "build": "tsc",
-    "test": "jest --verbose",
-    "start": "npm run build && ts-node ./build/test"
+    "build": "tsc -p tsconfig.json && node -e \"require('fs').cpSync('src/templates','build/templates',{recursive:true})\"",
+    "test": "jest --verbose"
+  },
+  "engines": {
+    "node": ">=20.19"
   },
   "dependencies": {
-    "@ssofy/node-sdk": "^2.4.2",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "validator": "^13.11.0"
+    "@9in/node": "^3.0.0",
+    "express": "^4.21.2 || ^5.1.0"
   },
   "devDependencies": {
-    "@prisma/client": "^4.0.0",
-    "@types/cors": "^2.8.13",
-    "@types/express": "^4.17.17",
-    "@types/node": "^18.11.9",
-    "@types/validator": "^13.9.0",
-    "copyfiles": "^2.4.1",
-    "dotenv": "^16.3.1",
-    "mysql2": "^3.6.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.0.0"
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.10.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "~5.9.3"
   }
 }
