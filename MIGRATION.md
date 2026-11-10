@@ -7,11 +7,11 @@ Upgrade both together; 2.x cannot read the new events.
 
 | 2.x | 3.x |
 |---|---|
-| `onEvent(event)`: `event.type`, `event.createdAt` | `event.event`, `event.created_at` |
-| `channels` published under `event.type` | under `event.event` (same names, e.g. `otp.requested`) |
+| `onEvent(event)`: `event.type`, `event.createdAt` | `event.event_type`, `event.created_at` |
+| `channels` published under `event.type` | under `event.event_type` (same names, e.g. `otp.requested`) |
 | `otp.requested` `data.userId`, `data.expiresAt` | `data.user_id`, `data.expires_at` |
 | Your own OTP templates using `{{ data.expiresAt }}` | `{{ data.expires_at }}` |
-| Webhooks through the re-exported `webhookHandler`: `event.type`, `event.data.userId` | `event.event`, `event.data.user.id` |
+| Webhooks through the re-exported `webhookHandler`: `event.type`, `event.data.userId` | `event.event_type`, `event.data.user.id` |
 
 The full list of renamed fields (users, sessions, Management API) is in
 [`@9in-io/node`'s MIGRATION.md](https://github.com/9in-io/node-sdk/blob/master/MIGRATION.md#3x--4x).

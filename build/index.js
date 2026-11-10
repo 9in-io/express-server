@@ -72,7 +72,7 @@ function nineAdapter(config) {
             if (sendOtp)
                 await sendOtp(event);
             for (const channel of config.channels ?? [])
-                channel.publish(event.event, event);
+                channel.publish(event.event_type, event);
             await config.onEvent?.(event);
         },
     });

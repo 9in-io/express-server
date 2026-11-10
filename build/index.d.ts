@@ -27,7 +27,7 @@ export interface NineAdapterConfig<U = unknown> {
         /** Template variables, e.g. {brand: 'Acme'}. */
         vars?: Record<string, unknown>;
     };
-    /** Every adapter event is published to these channels under its name (`event.event`, e.g. `user.updated`). */
+    /** Every adapter event is published to these channels under its name (`event.event_type`, e.g. `user.updated`). */
     channels?: Events.EventChannel[];
     /** Called for every adapter event after OTP delivery and publishing. */
     onEvent?(event: AdapterEvent): unknown;

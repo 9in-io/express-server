@@ -83,7 +83,7 @@ notifier to replace them, or set `otp: false` and deliver the code in `onEvent`.
 
 Pass `channels: [new Events.NodeEventChannel()]` (or `RedisEventChannel`) to publish every
 adapter event under its name, and/or handle them in `onEvent`. Events are
-`{id, event, created_at, data}` with snake_case data (`user_id`, `expires_at`).
+`{id, event_type, created_at, data}` with snake_case data (`user_id`, `expires_at`).
 
 ## Environment
 

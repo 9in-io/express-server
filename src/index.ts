@@ -39,7 +39,7 @@ export interface NineAdapterConfig<U = unknown> {
         /** Template variables, e.g. {brand: 'Acme'}. */
         vars?: Record<string, unknown>;
     };
-    /** Every adapter event is published to these channels under its name (`event.event`, e.g. `user.updated`). */
+    /** Every adapter event is published to these channels under its name (`event.event_type`, e.g. `user.updated`). */
     channels?: Events.EventChannel[];
     /** Called for every adapter event after OTP delivery and publishing. */
     onEvent?(event: AdapterEvent): unknown;
@@ -98,7 +98,7 @@ export function nineAdapter<U>(config: NineAdapterConfig<U>): Router {
         },
         async onEvent(event) {
             if (sendOtp) await sendOtp(event);
-            for (const channel of config.channels ?? []) channel.publish(event.event, event);
+            for (const channel of config.channels ?? []) channel.publish(event.event_type, event);
             await config.onEvent?.(event);
         },
     });
