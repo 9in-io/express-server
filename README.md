@@ -76,13 +76,14 @@ the URL to `https://your-app.com/nine`.
 9in generates sign-in and password-reset codes for adapter users and sends them as
 `otp.requested`. With `otp` notifiers configured, they are delivered with the bundled
 Handlebars templates (`build/templates/otp/{email,sms}.handlebars`; data `data.code`,
-`data.purpose`, `data.expiresAt`, `vars.brand`). Register your own `otp` template on a
+`data.purpose`, `data.expires_at`, `vars.brand`). Register your own `otp` template on a
 notifier to replace them, or set `otp: false` and deliver the code in `onEvent`.
 
 ### Events
 
 Pass `channels: [new Events.NodeEventChannel()]` (or `RedisEventChannel`) to publish every
-adapter event under its type, and/or handle them in `onEvent`.
+adapter event under its name, and/or handle them in `onEvent`. Events are
+`{id, event, created_at, data}` with snake_case data (`user_id`, `expires_at`).
 
 ## Environment
 

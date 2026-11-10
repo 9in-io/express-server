@@ -27,14 +27,14 @@ export interface NineAdapterConfig<U = unknown> {
         /** Template variables, e.g. {brand: 'Acme'}. */
         vars?: Record<string, unknown>;
     };
-    /** Every adapter event is published to these channels under its type (e.g. `user.updated`). */
+    /** Every adapter event is published to these channels under its name (`event.event`, e.g. `user.updated`). */
     channels?: Events.EventChannel[];
     /** Called for every adapter event after OTP delivery and publishing. */
     onEvent?(event: AdapterEvent): unknown;
     /** Signature tolerance in seconds (default 300). */
     toleranceSeconds?: number;
 }
-/** The bundled OTP templates (Handlebars; data: `data.code`, `data.purpose`, `data.expiresAt`, `vars.brand`). */
+/** The bundled OTP templates (Handlebars; data: `data.code`, `data.purpose`, `data.expires_at`, `vars.brand`). */
 export declare function defaultOtpTemplate(channel: Notifications.Channel): Notifications.Template;
 /**
  * Express router serving adapter protocol v2: `POST /authenticate`, `POST /user`,

@@ -20,7 +20,7 @@ const node_path_1 = require("node:path");
 const express_1 = require("express");
 const node_1 = require("@9in-io/node");
 const TEMPLATES = (0, node_path_1.join)(__dirname, 'templates', 'otp');
-/** The bundled OTP templates (Handlebars; data: `data.code`, `data.purpose`, `data.expiresAt`, `vars.brand`). */
+/** The bundled OTP templates (Handlebars; data: `data.code`, `data.purpose`, `data.expires_at`, `vars.brand`). */
 function defaultOtpTemplate(channel) {
     return {
         name: 'otp',
@@ -72,7 +72,7 @@ function nineAdapter(config) {
             if (sendOtp)
                 await sendOtp(event);
             for (const channel of config.channels ?? [])
-                channel.publish(event.type, event);
+                channel.publish(event.event, event);
             await config.onEvent?.(event);
         },
     });

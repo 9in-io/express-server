@@ -39,7 +39,7 @@ export interface NineAdapterConfig<U = unknown> {
         /** Template variables, e.g. {brand: 'Acme'}. */
         vars?: Record<string, unknown>;
     };
-    /** Every adapter event is published to these channels under its type (e.g. `user.updated`). */
+    /** Every adapter event is published to these channels under its name (`event.event`, e.g. `user.updated`). */
     channels?: Events.EventChannel[];
     /** Called for every adapter event after OTP delivery and publishing. */
     onEvent?(event: AdapterEvent): unknown;
@@ -49,7 +49,7 @@ export interface NineAdapterConfig<U = unknown> {
 
 const TEMPLATES = join(__dirname, 'templates', 'otp');
 
-/** The bundled OTP templates (Handlebars; data: `data.code`, `data.purpose`, `data.expiresAt`, `vars.brand`). */
+/** The bundled OTP templates (Handlebars; data: `data.code`, `data.purpose`, `data.expires_at`, `vars.brand`). */
 export function defaultOtpTemplate(channel: Notifications.Channel): Notifications.Template {
     return {
         name: 'otp',
@@ -98,7 +98,7 @@ export function nineAdapter<U>(config: NineAdapterConfig<U>): Router {
         },
         async onEvent(event) {
             if (sendOtp) await sendOtp(event);
-            for (const channel of config.channels ?? []) channel.publish(event.type, event);
+            for (const channel of config.channels ?? []) channel.publish(event.event, event);
             await config.onEvent?.(event);
         },
     });

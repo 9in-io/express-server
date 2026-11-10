@@ -114,7 +114,7 @@ describe('nineAdapter', () => {
         app.use('/nine', nineAdapter({secret: SECRET, users, otp: {email, sms, vars: {brand: 'Acme'}}, channels: [channel], onEvent: (e) => void seen.push(e.id)}));
         const base = await start(app);
 
-        const event = {id: 'evt_1', type: 'otp.requested', createdAt: '2026-11-09T10:00:00Z', data: {userId: '1', channel: 'sms', to: '+447700900000', code: '424242', purpose: 'login', expiresAt: '2026-11-09T10:05:00Z'}};
+        const event = {id: 'evt_1', event: 'otp.requested', created_at: '2026-11-09T10:00:00.000Z', data: {user_id: '1', channel: 'sms', to: '+447700900000', code: '424242', purpose: 'login', expires_at: '2026-11-09T10:05:00.000Z'}};
         const {res, text} = await call(base, '/nine/event', event);
 
         expect(res.status).toBe(204);
@@ -147,14 +147,14 @@ describe('nineAdapter', () => {
         app.use('/nine', nineAdapter({secret: SECRET, users, otp: {email, vars: {brand: 'Acme'}}}));
         const base = await start(app);
 
-        const event = {id: 'evt_2', type: 'otp.requested', createdAt: '2026-11-09T10:00:00Z', data: {userId: '1', channel: 'email', to: 'jane@acme.test', code: '135790', purpose: 'login', expiresAt: '2026-11-09T10:05:00Z'}};
+        const event = {id: 'evt_2', event: 'otp.requested', created_at: '2026-11-09T10:00:00.000Z', data: {user_id: '1', channel: 'email', to: 'jane@acme.test', code: '135790', purpose: 'login', expires_at: '2026-11-09T10:05:00.000Z'}};
         expect((await call(base, '/nine/event', event)).res.status).toBe(204);
         expect(email.sent).toHaveLength(1);
         expect(email.sent[0]!.receiver).toBe('jane@acme.test');
         expect(email.sent[0]!.message).toContain('135790');
         expect(email.sent[0]!.message).toContain('Acme');
         // Other events are not codes to deliver.
-        expect((await call(base, '/nine/event', {...event, id: 'evt_3', type: 'user.updated'})).res.status).toBe(204);
+        expect((await call(base, '/nine/event', {...event, id: 'evt_3', event: 'user.updated'})).res.status).toBe(204);
         expect(email.sent).toHaveLength(1);
     });
 
@@ -162,7 +162,7 @@ describe('nineAdapter', () => {
         const app = express();
         app.use('/nine', nineAdapter({secret: SECRET, users, onEvent: () => Promise.reject(new Error('db down'))}));
         const base = await start(app);
-        const event = {id: 'evt_4', type: 'user.updated', createdAt: '2026-11-09T10:00:00Z', data: {userId: '1'}};
+        const event = {id: 'evt_4', event: 'user.updated', created_at: '2026-11-09T10:00:00.000Z', data: {user_id: '1', fields: ['name']}};
         expect((await call(base, '/nine/event', event)).res.status).toBe(500);
     });
 
