@@ -16,7 +16,7 @@
   "homepage": "https://9in.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/9in-io/express-server.git"
+    "url": "git+https://github.com/9in-io/express-server.git"
   },
   "main": "build/index.js",
   "types": "build/index.d.ts",
