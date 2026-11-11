@@ -49,13 +49,15 @@ export interface NineAdapterConfig<U = unknown> {
 
 const TEMPLATES = join(__dirname, 'templates', 'otp');
 
-/** The bundled OTP templates (Handlebars; data: `data.code`, `data.purpose`, `data.expires_at`, `vars.brand`). */
+/**
+ * The bundled OTP templates, filled by @9in-io/node's placeholder engine (`{{ data.code }}`,
+ * `{{ data.purpose }}`, `{{ data.expires_at }}`, `{{ vars.brand }}`).
+ */
 export function defaultOtpTemplate(channel: Notifications.Channel): Notifications.Template {
     return {
         name: 'otp',
         channel,
-        path: join(TEMPLATES, channel === Notifications.Channel.SMS ? 'sms.handlebars' : 'email.handlebars'),
-        engine: new Notifications.HandlebarsEngine(),
+        path: join(TEMPLATES, channel === Notifications.Channel.SMS ? 'sms.txt' : 'email.html'),
     };
 }
 

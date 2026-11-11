@@ -1,6 +1,6 @@
 {
   "name": "@9in-io/express-server",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Keep your users in your own database and sign them in with 9in: an Express router for adapter protocol v2 (authenticate, user, event) with OTP delivery and event channels.",
   "keywords": [
     "9in",
@@ -34,13 +34,16 @@
     "node": ">=20.19"
   },
   "dependencies": {
-    "@9in-io/node": "^4.0.0",
+    "@9in-io/node": "^4.1.0"
+  },
+  "peerDependencies": {
     "express": "^4.21.2 || ^5.1.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.0",
+    "express": "^5.1.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "typescript": "~5.9.3"

@@ -75,9 +75,9 @@ the URL to `https://your-app.com/nine`.
 
 9in generates sign-in and password-reset codes for adapter users and sends them as
 `otp.requested`. With `otp` notifiers configured, they are delivered with the bundled
-Handlebars templates (`build/templates/otp/{email,sms}.handlebars`; data `data.code`,
-`data.purpose`, `data.expires_at`, `vars.brand`). Register your own `otp` template on a
-notifier to replace them, or set `otp: false` and deliver the code in `onEvent`.
+templates (`build/templates/otp/email.html` and `sms.txt`), which fill `{{ data.code }}`,
+`{{ data.purpose }}`, `{{ data.expires_at }}` and `{{ vars.brand }}`. Register your own `otp`
+template on a notifier to replace them, or set `otp: false` and deliver the code in `onEvent`.
 
 ### Events
 

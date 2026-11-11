@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 3.1.0 - 2026-11-11
+
+No `handlebars` at run time, with `@9in-io/node` 4.1.0.
+
+* The bundled OTP templates (`templates/otp/email.html`, `sms.txt`) are filled by `@9in-io/node`'s
+  placeholder engine; the messages are the same.
+* `express` is a peer dependency (it was a regular one), so the package uses your app's Express
+  instead of possibly installing a second copy. npm installs it for you if it's missing.
+* Custom templates in `otp.templates` that use `new Notifications.HandlebarsEngine()` need
+  `npm install handlebars` in your app (see `@9in-io/node`'s MIGRATION.md, 4.0 → 4.1).
+
 ## 3.0.0 - 2026-11-10
 
 Breaking, with `@9in-io/node` 4.0.0 and the 9in release of 2026-11-10: adapter events are

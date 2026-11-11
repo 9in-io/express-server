@@ -34,7 +34,10 @@ export interface NineAdapterConfig<U = unknown> {
     /** Signature tolerance in seconds (default 300). */
     toleranceSeconds?: number;
 }
-/** The bundled OTP templates (Handlebars; data: `data.code`, `data.purpose`, `data.expires_at`, `vars.brand`). */
+/**
+ * The bundled OTP templates, filled by @9in-io/node's placeholder engine (`{{ data.code }}`,
+ * `{{ data.purpose }}`, `{{ data.expires_at }}`, `{{ vars.brand }}`).
+ */
 export declare function defaultOtpTemplate(channel: Notifications.Channel): Notifications.Template;
 /**
  * Express router serving adapter protocol v2: `POST /authenticate`, `POST /user`,

@@ -20,13 +20,15 @@ const node_path_1 = require("node:path");
 const express_1 = require("express");
 const node_1 = require("@9in-io/node");
 const TEMPLATES = (0, node_path_1.join)(__dirname, 'templates', 'otp');
-/** The bundled OTP templates (Handlebars; data: `data.code`, `data.purpose`, `data.expires_at`, `vars.brand`). */
+/**
+ * The bundled OTP templates, filled by @9in-io/node's placeholder engine (`{{ data.code }}`,
+ * `{{ data.purpose }}`, `{{ data.expires_at }}`, `{{ vars.brand }}`).
+ */
 function defaultOtpTemplate(channel) {
     return {
         name: 'otp',
         channel,
-        path: (0, node_path_1.join)(TEMPLATES, channel === node_1.Notifications.Channel.SMS ? 'sms.handlebars' : 'email.handlebars'),
-        engine: new node_1.Notifications.HandlebarsEngine(),
+        path: (0, node_path_1.join)(TEMPLATES, channel === node_1.Notifications.Channel.SMS ? 'sms.txt' : 'email.html'),
     };
 }
 /**
