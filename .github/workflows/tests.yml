@@ -58,6 +58,9 @@ jobs:
       - name: Type-check and build
         run: npm run build
 
+      - name: Check every export can be imported by name from an ES module
+        run: node scripts/check-esm-exports.mjs
+
       - name: Run tests
         run: npm test
         env:
