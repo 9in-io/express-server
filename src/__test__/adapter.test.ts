@@ -3,7 +3,9 @@ import express from 'express';
 import type {AddressInfo} from 'node:net';
 import type {Server} from 'node:http';
 import {Events, Notifications, signPayload, verifySignature, type AdapterIdentifier} from '@9in-io/node';
-import {nineAdapter, type UserStore} from '../index';
+import Database from 'better-sqlite3';
+import bcrypt from 'bcryptjs';
+import {nineAdapter, sqlUserStore, type UserStore} from '../index';
 
 interface Row {
     id: number;
@@ -191,7 +193,7 @@ describe('nineAdapter', () => {
         expect(JSON.parse(text).user).toMatchObject({id: '2', blocked: true});
     });
 
-    it('prefers NINE_ADAPTER_SECRET over the legacy names', async () => {
+    it('reads NINE_ADAPTER_SECRET, and nothing else', async () => {
         const saved = {...process.env};
         process.env.NINE_ADAPTER_SECRET = SECRET;
         process.env.SSOFY_API_SECRET = 'legacy';
@@ -213,10 +215,37 @@ describe('nineAdapter', () => {
         delete process.env.SSOFY_ADAPTER_SECRET;
         try {
             expect(() => nineAdapter({users})).toThrow('adapter secret missing');
-            process.env.SSOFY_API_SECRET = 'legacy';
+            process.env.SSOFY_API_SECRET = 'legacy'; // the old SSOfy name is not read
+            expect(() => nineAdapter({users})).toThrow('adapter secret missing');
+            process.env.NINE_ADAPTER_SECRET = SECRET;
             expect(() => nineAdapter({users})).not.toThrow();
         } finally {
             process.env = saved;
         }
+    });
+});
+
+describe('nineAdapter with a ready-made store', () => {
+    it('signs a SQL user in through signed adapter requests', async () => {
+        const db = new Database(':memory:');
+        db.exec('CREATE TABLE users (id INTEGER PRIMARY KEY, email TEXT, password_hash TEXT, email_verified INTEGER, blocked INTEGER, name TEXT)');
+        db.prepare('INSERT INTO users VALUES (1, ?, ?, 1, 0, ?)').run('Jane@Acme.test', bcrypt.hashSync('hunter2', 4), 'Jane');
+        db.prepare('INSERT INTO users VALUES (2, ?, ?, 1, 1, ?)').run('gone@acme.test', bcrypt.hashSync('hunter2', 4), 'Gone');
+        const app = express();
+        app.use('/nine', nineAdapter({secret: SECRET, users: sqlUserStore({dialect: 'sqlite', query: async (sql, params) => db.prepare(sql).all(...params) as any[]})}));
+        const base = await start(app);
+
+        const ok = await call(base, '/nine/authenticate', {identifier: {type: 'email', value: 'jane@acme.test'}, password: 'hunter2'});
+        expect(ok.res.status).toBe(200);
+        expect(JSON.parse(ok.text).user).toEqual({id: '1', email: 'Jane@Acme.test', email_verified: true, name: 'Jane', blocked: false});
+        expect(await verifySignature(SECRET, ok.res.headers.get('9in-signature'), 'POST', '/nine/authenticate#req_7', ok.text)).toBe(true);
+
+        expect((await call(base, '/nine/authenticate', {identifier: {type: 'email', value: 'jane@acme.test'}, password: 'nope'})).res.status).toBe(401);
+        expect((await call(base, '/nine/authenticate', {identifier: {type: 'email', value: 'nobody@acme.test'}, password: 'hunter2'})).res.status).toBe(401);
+        expect((await call(base, '/nine/authenticate', {identifier: {type: 'email', value: 'gone@acme.test'}, password: 'hunter2'})).res.status).toBe(403);
+        const found = await call(base, '/nine/user', {id: '1'});
+        expect(found.res.status).toBe(200);
+        expect((await call(base, '/nine/user', {identifier: {type: 'email', value: 'JANE@acme.test'}})).res.status).toBe(200);
+        expect((await call(base, '/nine/user', {id: '42'})).res.status).toBe(404);
     });
 });

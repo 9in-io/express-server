@@ -13,7 +13,7 @@ export interface UserStore<U = unknown> {
     toAdapterUser(user: U): AdapterUser | Promise<AdapterUser>;
 }
 export interface NineAdapterConfig<U = unknown> {
-    /** Adapter secret from the console; several during rotation. Default: NINE_ADAPTER_SECRET (SSOFY_API_SECRET fallback). */
+    /** Adapter secret from the console; several during rotation. Default: NINE_ADAPTER_SECRET. */
     secret?: string | string[];
     users: UserStore<U>;
     /**
@@ -48,5 +48,10 @@ export declare function defaultOtpTemplate(channel: Notifications.Channel): Noti
  * and set the adapter URL in the 9in console to https://your-app.com/nine.
  */
 export declare function nineAdapter<U>(config: NineAdapterConfig<U>): Router;
+export { DEFAULT_FIELDS, mapUser, verifyHash, type Row, type StoreOptions, type UserFields } from './stores/common';
+export { prismaUserStore, type PrismaUserDelegate, type PrismaUserStoreOptions } from './stores/prisma';
+export { mongoUserStore, mongooseUserStore, type MongoCollection, type MongooseModel, type MongoUserStoreOptions } from './stores/mongo';
+export { sqlUserStore, type SqlDialect, type SqlUserStoreOptions } from './stores/sql';
+export { dynamoUserStore, type DynamoDocumentClient, type DynamoUserStoreOptions } from './stores/dynamodb';
 export * from '@9in-io/node';
 export default nineAdapter;

@@ -10,6 +10,7 @@ import {
     type AdapterIdentifier,
     type AdapterUser,
 } from '@9in-io/node';
+import {DUMMY_BCRYPT, verifyHash} from './stores/common';
 
 /**
  * Your user database, as 9in needs it. `U` is your own user record.
@@ -25,7 +26,7 @@ export interface UserStore<U = unknown> {
 }
 
 export interface NineAdapterConfig<U = unknown> {
-    /** Adapter secret from the console; several during rotation. Default: NINE_ADAPTER_SECRET (SSOFY_API_SECRET fallback). */
+    /** Adapter secret from the console; several during rotation. Default: NINE_ADAPTER_SECRET. */
     secret?: string | string[];
     users: UserStore<U>;
     /**
@@ -90,7 +91,12 @@ export function nineAdapter<U>(config: NineAdapterConfig<U>): Router {
         toleranceSeconds: config.toleranceSeconds,
         async authenticate(identifier, password) {
             const user = await config.users.findByIdentifier(identifier);
-            if (!user || !(await config.users.verifyPassword(user, password))) return 'invalid';
+            if (!user) {
+                // About as slow as a wrong password, so answers don't tell which accounts exist.
+                await verifyHash(password, DUMMY_BCRYPT).catch(() => false);
+                return 'invalid';
+            }
+            if (!(await config.users.verifyPassword(user, password))) return 'invalid';
             const claims = await config.users.toAdapterUser(user);
             return claims.blocked ? 'blocked' : claims;
         },
@@ -110,5 +116,10 @@ export function nineAdapter<U>(config: NineAdapterConfig<U>): Router {
     return router;
 }
 
+export {DEFAULT_FIELDS, mapUser, verifyHash, type Row, type StoreOptions, type UserFields} from './stores/common';
+export {prismaUserStore, type PrismaUserDelegate, type PrismaUserStoreOptions} from './stores/prisma';
+export {mongoUserStore, mongooseUserStore, type MongoCollection, type MongooseModel, type MongoUserStoreOptions} from './stores/mongo';
+export {sqlUserStore, type SqlDialect, type SqlUserStoreOptions} from './stores/sql';
+export {dynamoUserStore, type DynamoDocumentClient, type DynamoUserStoreOptions} from './stores/dynamodb';
 export * from '@9in-io/node';
 export default nineAdapter;

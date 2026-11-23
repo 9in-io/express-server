@@ -1,5 +1,21 @@
 # CHANGELOG
 
+
+## 4.0.0 - 2026-11-23
+
+* Ready-made user stores, so you don't have to write a `UserStore`: `prismaUserStore`,
+  `sqlUserStore` (PostgreSQL, MySQL, MariaDB, SQLite, SQL Server through the `query` function
+  you already have: pg, mysql2, better-sqlite3, Sequelize, Knex), `mongoUserStore`,
+  `mongooseUserStore` and `dynamoUserStore`. They map your columns (`fields`), match emails and
+  usernames ignoring case, refuse an identifier two users share, check bcrypt and argon2 hashes
+  with whichever library you have, and add `metadata`. None of the drivers is a dependency.
+* An unknown email takes about as long to refuse as a wrong password.
+* Tested against real PostgreSQL, MariaDB, SQLite and MongoDB, DynamoDB (dynalite) and a real
+  Prisma client.
+
+Breaking: built on `@9in-io/node` 5, which no longer reads `SSOFY_*` environment variables. See
+[MIGRATION.md](MIGRATION.md#3x--4x).
+
 ## 3.1.0 - 2026-11-11
 
 No `handlebars` at run time, with `@9in-io/node` 4.1.0.

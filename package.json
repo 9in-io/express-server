@@ -1,15 +1,21 @@
 {
   "name": "@9in-io/express-server",
-  "version": "3.1.0",
-  "description": "Keep your users in your own database and sign them in with 9in: an Express router for adapter protocol v2 (authenticate, user, event) with OTP delivery and event channels.",
+  "version": "4.0.0",
+  "description": "Keep your users in your own database and sign them in with 9in: an Express router for adapter protocol v2, with ready-made user stores for Prisma, SQL, MongoDB, Mongoose and DynamoDB.",
   "keywords": [
     "9in",
-    "sso",
-    "express",
     "adapter",
+    "authentication",
+    "dynamodb",
+    "express",
+    "mongodb",
+    "mongoose",
+    "mysql",
     "oauth2",
     "openid-connect",
-    "authentication"
+    "postgresql",
+    "prisma",
+    "sso"
   ],
   "license": "MIT",
   "author": "9in <support@9in.io>",
@@ -34,18 +40,49 @@
     "node": ">=20.19"
   },
   "dependencies": {
-    "@9in-io/node": "^4.1.0"
+    "@9in-io/node": "^5.0.0"
   },
   "peerDependencies": {
-    "express": "^4.21.2 || ^5.1.0"
+    "express": "^4.21.2 || ^5.1.0",
+    "@aws-sdk/lib-dynamodb": "^3.0.0",
+    "bcrypt": ">=5",
+    "bcryptjs": ">=2",
+    "argon2": ">=0.30"
   },
   "devDependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1175.0",
+    "@aws-sdk/lib-dynamodb": "^3.1175.0",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.0",
+    "@types/pg": "^8.23.1",
+    "argon2": "^0.44.0",
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.11.1",
+    "dynalite": "^3.2.2",
     "express": "^5.1.0",
     "jest": "^29.7.0",
+    "mongodb": "^6.22.0",
+    "mongodb-memory-server": "^10.4.3",
+    "mongoose": "^8.24.10",
+    "mysql2": "^3.24.6",
+    "pg": "^8.23.1",
     "ts-jest": "^29.2.5",
     "typescript": "~5.9.3"
+  },
+  "peerDependenciesMeta": {
+    "@aws-sdk/lib-dynamodb": {
+      "optional": true
+    },
+    "bcrypt": {
+      "optional": true
+    },
+    "bcryptjs": {
+      "optional": true
+    },
+    "argon2": {
+      "optional": true
+    }
   }
 }

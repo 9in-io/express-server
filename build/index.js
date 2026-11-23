@@ -14,11 +14,13 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.dynamoUserStore = exports.sqlUserStore = exports.mongooseUserStore = exports.mongoUserStore = exports.prismaUserStore = exports.verifyHash = exports.mapUser = exports.DEFAULT_FIELDS = void 0;
 exports.defaultOtpTemplate = defaultOtpTemplate;
 exports.nineAdapter = nineAdapter;
 const node_path_1 = require("node:path");
 const express_1 = require("express");
 const node_1 = require("@9in-io/node");
+const common_1 = require("./stores/common");
 const TEMPLATES = (0, node_path_1.join)(__dirname, 'templates', 'otp');
 /**
  * The bundled OTP templates, filled by @9in-io/node's placeholder engine (`{{ data.code }}`,
@@ -61,7 +63,12 @@ function nineAdapter(config) {
         toleranceSeconds: config.toleranceSeconds,
         async authenticate(identifier, password) {
             const user = await config.users.findByIdentifier(identifier);
-            if (!user || !(await config.users.verifyPassword(user, password)))
+            if (!user) {
+                // About as slow as a wrong password, so answers don't tell which accounts exist.
+                await (0, common_1.verifyHash)(password, common_1.DUMMY_BCRYPT).catch(() => false);
+                return 'invalid';
+            }
+            if (!(await config.users.verifyPassword(user, password)))
                 return 'invalid';
             const claims = await config.users.toAdapterUser(user);
             return claims.blocked ? 'blocked' : claims;
@@ -82,5 +89,18 @@ function nineAdapter(config) {
     router.post(['/authenticate', '/user', '/event'], handler);
     return router;
 }
+var common_2 = require("./stores/common");
+Object.defineProperty(exports, "DEFAULT_FIELDS", { enumerable: true, get: function () { return common_2.DEFAULT_FIELDS; } });
+Object.defineProperty(exports, "mapUser", { enumerable: true, get: function () { return common_2.mapUser; } });
+Object.defineProperty(exports, "verifyHash", { enumerable: true, get: function () { return common_2.verifyHash; } });
+var prisma_1 = require("./stores/prisma");
+Object.defineProperty(exports, "prismaUserStore", { enumerable: true, get: function () { return prisma_1.prismaUserStore; } });
+var mongo_1 = require("./stores/mongo");
+Object.defineProperty(exports, "mongoUserStore", { enumerable: true, get: function () { return mongo_1.mongoUserStore; } });
+Object.defineProperty(exports, "mongooseUserStore", { enumerable: true, get: function () { return mongo_1.mongooseUserStore; } });
+var sql_1 = require("./stores/sql");
+Object.defineProperty(exports, "sqlUserStore", { enumerable: true, get: function () { return sql_1.sqlUserStore; } });
+var dynamodb_1 = require("./stores/dynamodb");
+Object.defineProperty(exports, "dynamoUserStore", { enumerable: true, get: function () { return dynamodb_1.dynamoUserStore; } });
 __exportStar(require("@9in-io/node"), exports);
 exports.default = nineAdapter;

@@ -22,6 +22,27 @@ jobs:
       matrix:
         node: [20, 22, 24]
 
+    # Real databases for the user stores' tests (MongoDB runs in-process through
+    # mongodb-memory-server, DynamoDB through dynalite).
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: nine
+          POSTGRES_PASSWORD: nine
+          POSTGRES_DB: nine_test
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U nine" --health-interval 2s --health-timeout 2s --health-retries 20
+      mariadb:
+        image: mariadb:11
+        env:
+          MARIADB_USER: nine
+          MARIADB_PASSWORD: nine
+          MARIADB_DATABASE: nine_test
+          MARIADB_ROOT_PASSWORD: root
+        ports: ['3306:3306']
+        options: --health-cmd "healthcheck.sh --connect --innodb_initialized" --health-interval 2s --health-timeout 2s --health-retries 30
+
     steps:
       - uses: actions/checkout@v7
 
@@ -39,3 +60,6 @@ jobs:
 
       - name: Run tests
         run: npm test
+        env:
+          NINE_TEST_PG_URL: postgres://nine:nine@127.0.0.1:5432/nine_test
+          NINE_TEST_MYSQL_URL: mysql://nine:nine@127.0.0.1:3306/nine_test
